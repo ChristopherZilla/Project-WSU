@@ -1,0 +1,21 @@
+ .box {
+        border: 0.2em dashed #FE1B00;
+        width: 10em;
+        height: 10em;
+		color: black;
+		font-family: Calibri, Cambara, Arial, "Trebuchet MS", Verdana, Geneva;
+		text-align:center;
+		
+		
+    }
+	
+.container {
+		float: left;
+		margin: 5%;
+
+	}
+
+.upform {
+		display:none;
+	}
+	
