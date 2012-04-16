@@ -1,36 +1,36 @@
 ﻿/**
-* https://github.com/ChristopherZilla/ChristopherComete
+* https://github.com/ChristopherZilla/Project-WSU
 * Christopher Daijardin c.daijardin@hotmail.fr
 */
 
+
+var startTime = 0;
+var start = 0;
+var end = 0;
+var diff = 0;
+var timerID = 0;
+var number = 0;
+var source='';
+	
+var BYTES_PER_CHUNK = 1024 * 1024; // 1MB chunk sizes.
+var debut = 0;
+var fin = BYTES_PER_CHUNK;
+	
 window.WebSocket = window.WebSocket || window.MozWebSocket;
 // if browser doesn't support WebSocket, just show some notification and exit
 if (!window.WebSocket)
   {
     alert("Sorry, but your browser doesn\'t support WebSockets");
-  }  
+  } 
+  
 var connection = new WebSocket("ws://127.0.0.1:8080");
 
-var c=0; // compteur pour consolePrint();
-var output=[]; //tableau pour consolePrint();
-var tag=[]; // tableau pour consolePrint();
 
-var startTime = 0;
-	var start = 0;
-	var end = 0;
-	var diff = 0;
-	var timerID = 0;
-	var number = 0;
-	var source='';
-	
-	var BYTES_PER_CHUNK = 1024 * 1024; // 1MB chunk sizes.
-	var debut = 0;
-	var fin = BYTES_PER_CHUNK;
-	
-	
+
 connection.onopen = function () 
   {
     console.log("WebSocket client connected");
+	alert('open');
 	prepare();
   };
   
@@ -60,19 +60,18 @@ connection.onmessage = function (message)
       }
 			
   };
+  
 
 function prepare()
   {
 
-	 
-	
 	var dropZone = document.getElementById("drop_zone");
-		dropZone.addEventListener('dragover', handleDragOver, false);
-		dropZone.addEventListener('drop', firstSlice, false);
+	dropZone.addEventListener('dragover', handleDragOver, false);
+	dropZone.addEventListener('drop', firstSlice, false);
 	
 		
 	var dropBtn = document.getElementById("drop_btn");
-		dropBtn.addEventListener('click',firstSlice, false);
+	dropBtn.addEventListener('click',firstSlice, false);
   }
 
 function handleDragOver(evt)
@@ -81,18 +80,10 @@ function handleDragOver(evt)
 	evt.dataTransfer.dropEffect = 'copy'; 
   }
 
-function consolePrint(print)
-  {
-	
-	tag[c]=print;
-	output.push("<li><strong>",tag[c],"</strong></li>");
-	document.getElementById("console-wsu").innerHTML = "<ul>" + output.join("") + "</ul>";
-	c++;
-  }
 
 function firstSlice(evt)
   {
-    evt.preventDefault();
+	evt.preventDefault();
 	var files;
 	var file;
 	var fname;
@@ -135,23 +126,26 @@ function firstSlice(evt)
 
 function errorHandler(evt)
   {
-    switch(evt.target.error.code)
+	switch(evt.target.error.code)
 	  {
-        case evt.target.error.NOT_FOUND_ERR:
-          alert("File Not Found!");
-        break;
+		case evt.target.error.NOT_FOUND_ERR:
+		  alert("File Not Found!");
+		  console.log("error code: "+evt.target.error.code);
+		  break;
 		
-        case evt.target.error.NOT_READABLE_ERR:
-          alert("File is not readable");
-        break;
+		case evt.target.error.NOT_READABLE_ERR:
+		  alert("File is not readable");
+		  console.log("error code: "+evt.target.error.code);
+		  break;
 		
-        case evt.target.error.ABORT_ERR:
-        
-		break;
+		case evt.target.error.ABORT_ERR:
+		  console.log("error code: "+evt.target.error.code);
+		  break;
 		
-        default:
-          alert("An error occurred reading this file.");
-      };
+		default:
+		  alert("An error occurred reading this file.");
+		  console.log("error code: "+evt.target.error.code);
+	  };
   }
 
 function progressNote(evt)
@@ -164,8 +158,8 @@ function progressNote(evt)
 		  {
 			if((document.getElementById("percent-wsu")) && (document.getElementById("progres-wsu")))
 			  {
-			document.getElementById("percent-wsu").innerHTML = percentUploaded+" %";
-			document.getElementById("progres-wsu").value = percentUploaded;
+				document.getElementById("percent-wsu").innerHTML = percentUploaded+" %";
+				document.getElementById("progres-wsu").value = percentUploaded;
 			  }  
 		  }
 	  }
@@ -214,7 +208,7 @@ function upload(evt,i)
 	evt.preventDefault();
 	var files;
 	var file;
-	var blob;
+	var blob = null;
 	var reader;
 	var chunk;
 	var size;
@@ -240,8 +234,8 @@ function upload(evt,i)
 	
 	reader.onabort = function(e)
 	  {
-		alert("File read cancelled");
-		alert("err:"+e.toString());
+		alert("File read cancelled");	
+		console.log("Error: "+e.toString()+" error code: "+evt.target.error.code);
       };
 	  
 	reader.onloadstart = function(e)
@@ -250,32 +244,30 @@ function upload(evt,i)
 		chrono();	
 	  };
 	
-	
 	reader.onload = function(e)
 	  {
 		if (e.target.readyState == FileReader.DONE){
 		  start = new Date();
 		  chrono();
 		  var content = e.target.result; 
-		  //var ui = new Uint8Array(content);
-		
-		
+			
 		  if(size > BYTES_PER_CHUNK)
 		    {
 			
 		      while(debut<size)
 			    {
 			      chunk = content.slice(debut,fin);
+			
 				  var compte =
 				    {
 					  source: "number",
 					  numero: number,
 					  begin: debut
-				    };
+				    }; 
 			
 				  connection.send(JSON.stringify(compte)); 
 				  connection.send(chunk);
-				  //connection.send(content); // A utiliser quand le fichier est déjà découpé en entrée
+				//  connection.send(content); // A utiliser quand le fichier est déjà découpé en entrée
 				
 				
 				number = number + 1;
@@ -284,7 +276,7 @@ function upload(evt,i)
 			  }
 		  }
 		else
-		  {
+		  { 
 			connection.send(content);
 		  }
 		if(i<1)
@@ -306,8 +298,8 @@ function upload(evt,i)
 		connection.send("end");
 		clearTimeout(timerID);
 	  };
-/*	
-	if(size > BYTES_PER_CHUNK)
+	
+/*	if(size > BYTES_PER_CHUNK)
 	  {
 	    while(debut<size)
 	      {
@@ -319,7 +311,7 @@ function upload(evt,i)
 		      {
 			    blob = file.mozSlice(debut, fin);
 		      }
-	        //reader.readAsArrayBuffer(file); // Reader read the file.
+	       
 			//alert("blob"+blob); //Fait fonctionner le découpage du fichier en entrée du readAsArrayBuffer
 			number = number + 1;
 		    debut = fin;

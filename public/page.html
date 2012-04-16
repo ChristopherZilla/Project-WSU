@@ -2,6 +2,7 @@
 	<head>
 		<link rel="stylesheet" href="style.css" />
 		
+		
 	</head>
 	<body>
 
@@ -9,14 +10,13 @@
 		<div id="drop_zone" class="box"> Websocket </br>-</br> Drop your file here</div>
 		<p>
 		<progress id="progres-wsu" value="0" max="100"></progress>
-		<span id="percent">0 %</span>
+		<span id="percent-wsu">0 %</span>
 		</p>
 		<form class="upform">
 				<input id='file-wsu' type="file" name="upload" multiple="multiple">
 				<input id="drop_btn" type="submit" value="Upload file"/>
 		</form>
 		<span id="chronotime-wsu">0:00:00:000</span>
-		<div id='console-wsu'></div>
 	</div>
 	
 	<div class="container">
@@ -32,8 +32,9 @@
 		<span id="xhrchronotime">0:00:00:000</span>
 		<div id='xhrlist'></div>
 	</div>
-	
-			<script src="wsu-dev.js"></script> 
-			<script src="xhr.js"></script>
+		
+		<script src="wsu-dev.js"></script> 
+		<script src="xhr.js"></script>
+		
 	</body>
 <html>
