@@ -1,6 +1,6 @@
 ﻿/**
 * https://github.com/ChristopherZilla/Project-WSU
-* Christopher Daijardin c.daijardin@hotmail.fr
+* Christopher Daijardin c.daijardin@gmail.fr
 */
 
 
@@ -25,12 +25,9 @@ if (!window.WebSocket)
   
 var connection = new WebSocket("ws://127.0.0.1:8080");
 
-
-
 connection.onopen = function () 
   {
     console.log("WebSocket client connected");
-	alert('open');
 	prepare();
   };
   
@@ -208,7 +205,7 @@ function upload(evt,i)
 	evt.preventDefault();
 	var files;
 	var file;
-	var blob = null;
+	var blob;
 	var reader;
 	var chunk;
 	var size;
@@ -257,7 +254,7 @@ function upload(evt,i)
 		      while(debut<size)
 			    {
 			      chunk = content.slice(debut,fin);
-			
+				
 				  var compte =
 				    {
 					  source: "number",
